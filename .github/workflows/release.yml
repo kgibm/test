@@ -23,10 +23,12 @@ jobs:
                        --fail \
                        --request POST \
                        --url https://api.github.com/repos/kgibm/test/releases \
-                       --data '{"tag_name":"${{github.ref_name}}"}' \
+                       --data '{"tag_name":"${{github.ref_name}}","generate_release_notes":true}' \
                        --header "Accept: application/vnd.github.v3+json" \
                        --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')" && \
           curl \
+            --silent \
+            --show-error \
             --fail \
             --request POST \
             --url https://uploads.github.com/repos/kgibm/test/releases/${RELEASE}/assets?name=README.md \
