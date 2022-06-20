@@ -15,8 +15,25 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build ${{env.GITHUB_WORKSPACE}},
+          echo Add other actions to build ${{github.ref_name}},
           echo test, and deploy your project.
+
+      - uses: octokit/request-action@v2.x
+        id: create_check_run
+        with:
+          route: POST /repos/{owner}/{repo}/check-runs
+          owner: octokit
+          repo: request-action
+          name: "Test check run"
+          head_sha: ${{ github.sha }}
+          output: | # The | is significant!
+            title: Test check run title
+            summary: A summary of the test check run
+            images:
+              - alt: Test image
+                image_url: https://octodex.github.com/images/jetpacktocat.png
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: octokit/request-action@v2.x
         id: get_latest_release
