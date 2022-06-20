@@ -37,7 +37,7 @@ jobs:
             --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
 
       - run: |
-          echo Latest release ID: ${{ steps.get_release.outputs.stdout }}
+          echo Latest release ID: ${{ steps.get_release.outputs.* }}
 
       # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
       - run: |
