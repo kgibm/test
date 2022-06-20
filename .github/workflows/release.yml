@@ -46,6 +46,7 @@ jobs:
       - name: Add asset
         run: |
           curl \
+            --fail-with-body \
             --request POST \
             --url https://uploads.github.com/repos/kgibm/test/releases/latest/assets?name=README.md \
             --header "Accept: application/vnd.github.v3+json" \
