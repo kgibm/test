@@ -17,7 +17,7 @@ jobs:
       # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
       - name: Create release and upload assets
         run: |
-          RELEASE="$(curl \
+          OUTPUT="$(curl \
                       --silent \
                       --show-error \
                       --fail \
@@ -25,7 +25,9 @@ jobs:
                       --url https://api.github.com/repos/kgibm/test/releases \
                       --data '{"tag_name":"${{github.ref_name}}"}' \
                       --header "Accept: application/vnd.github.v3+json" \
-                      --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')" && \
+                      --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}")" && \
+          echo "${OUTPUT}" && \
+          RELEASE="$(echo "${OUTPUT}" | jq '.id')" && \
           curl \
             --fail \
             --request POST \
