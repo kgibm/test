@@ -9,14 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build ${{github.ref_name}},
-          echo test, and deploy your project.
+      - run: |
+          echo Building for tag ${{github.ref_name}}
 
       # https://docs.github.com/en/rest/releases/releases#create-a-release
       - uses: octokit/request-action@v2.x
@@ -29,26 +24,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: octokit/request-action@v2.x
-        id: get_latest_release
-        with:
-          route: GET /repos/kgibm/test/releases/latest
-          owner: octokit
-          repo: request-action
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Print details
-        run: |
-          echo latest release: ${{ fromJson(steps.get_latest_release.outputs.data).id }}
-
-      # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
-      - name: Add asset
+      # https://docs.github.com/en/rest/releases/releases#get-the-latest-release
+      - id: get_release
         run: |
           curl \
-            --fail-with-body \
+            --fail \
+            --request GET \
+            --url https://uploads.github.com/repos/kgibm/test/releases/latest \
+            --header "Accept: application/vnd.github.v3+json" \
+            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
+
+      - run: |
+          echo Latest release ID: ${{ fromJson(steps.get_release.outputs.data).id }}
+
+      # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
+      - run: |
+          curl \
+            --fail \
             --request POST \
-            --url https://uploads.github.com/repos/kgibm/test/releases/latest/assets?name=README.md \
+            --url https://uploads.github.com/repos/kgibm/test/releases/fromJson(steps.get_release.outputs.data).id/assets?name=README.md \
             --header "Accept: application/vnd.github.v3+json" \
             --header "Content-Type: $(file -b --mime-type README.md)" \
             --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
