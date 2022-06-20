@@ -25,26 +25,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # https://docs.github.com/en/rest/releases/releases#get-the-latest-release
-      - id: get_release
-        run: |
-          curl \
-            --silent \
-            --show-error \
-            --fail \
-            --request GET \
-            --url https://api.github.com/repos/kgibm/test/releases/latest \
-            --header "Accept: application/vnd.github.v3+json" \
-            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
-
-      - run: |
-          echo Latest release ID: ${{ steps.get_release.outputs.* }}
-
       # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
       - run: |
+          RELEASE="$(curl \
+                      --silent \
+                      --show-error \
+                      --fail \
+                      --request GET \
+                      --url https://api.github.com/repos/kgibm/test/releases/latest \
+                      --header "Accept: application/vnd.github.v3+json" \
+                      --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')" && \
           curl \
             --fail \
             --request POST \
-            --url https://uploads.github.com/repos/kgibm/test/releases/fromJson(steps.get_release.outputs.data).id/assets?name=README.md \
+            --url https://uploads.github.com/repos/kgibm/test/releases/${RELEASE}/assets?name=README.md \
             --header "Accept: application/vnd.github.v3+json" \
             --header "Content-Type: $(file -b --mime-type README.md)" \
             --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
