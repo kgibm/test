@@ -38,4 +38,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print details
-        run: echo latest release: ${{ steps.get_latest_release.outputs.data }}
+        run: |
+          echo latest release: ${{ steps.get_latest_release.outputs.data }}
