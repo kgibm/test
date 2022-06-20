@@ -1,4 +1,4 @@
-name: Releases
+name: Release
 
 on: 
   push:
@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: |
-          echo Building for tag ${{github.ref_name}}
 
       # https://docs.github.com/en/rest/releases/releases#create-a-release
       # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
@@ -22,7 +20,7 @@ jobs:
                        --show-error \
                        --fail \
                        --request POST \
-                       --url https://api.github.com/repos/kgibm/test/releases \
+                       --url https://api.github.com/repos/${{github.repository}}/releases \
                        --data '{"tag_name":"${{github.ref_name}}","generate_release_notes":true}' \
                        --header "Accept: application/vnd.github.v3+json" \
                        --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')" && \
@@ -31,7 +29,7 @@ jobs:
             --show-error \
             --fail \
             --request POST \
-            --url https://uploads.github.com/repos/kgibm/test/releases/${RELEASE}/assets?name=README.md \
+            --url https://uploads.github.com/repos/${{github.repository}}/releases/${RELEASE}/assets?name=README.md \
             --header "Accept: application/vnd.github.v3+json" \
             --header "Content-Type: $(file -b --mime-type README.md)" \
             --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
