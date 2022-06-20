@@ -21,7 +21,7 @@ jobs:
                       --silent \
                       --show-error \
                       --fail \
-                      --request GET \
+                      --request POST \
                       --url https://api.github.com/repos/kgibm/test/releases \
                       --data '{"tag_name":"${{github.ref_name}}"}' \
                       --header "Accept: application/vnd.github.v3+json" \
