@@ -21,7 +21,7 @@ jobs:
                        --fail \
                        --request POST \
                        --url https://api.github.com/repos/${{github.repository}}/releases \
-                       --data '{"tag_name":"${{github.ref_name}}","generate_release_notes":true}' \
+                       --data '{"tag_name":"${{github.ref_name}}","name":"${{github.repository}}"}' \
                        --header "Accept: application/vnd.github.v3+json" \
                        --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')" && \
           curl \
