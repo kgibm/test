@@ -19,19 +19,12 @@ jobs:
           echo test, and deploy your project.
 
       - uses: octokit/request-action@v2.x
-        id: create_check_run
+        id: create_release
         with:
-          route: POST /repos/{owner}/{repo}/check-runs
+          route: POST /repos/kgibm/test/releases
           owner: octokit
           repo: request-action
-          name: "Test check run"
-          head_sha: ${{ github.sha }}
-          output: | # The | is significant!
-            title: Test check run title
-            summary: A summary of the test check run
-            images:
-              - alt: Test image
-                image_url: https://octodex.github.com/images/jetpacktocat.png
+          tag_name: ${{github.ref_name}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
