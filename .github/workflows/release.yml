@@ -28,6 +28,8 @@ jobs:
       - id: get_release
         run: |
           curl \
+            --silent \
+            --show-error \
             --fail \
             --request GET \
             --url https://api.github.com/repos/kgibm/test/releases/latest \
