@@ -44,10 +44,11 @@ jobs:
 
       # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
       - name: Add asset
-        run: curl --fail \
-              --request POST \
-              --url https://uploads.github.com/repos/kgibm/test/releases/${{ fromJson(steps.get_latest_release.outputs.data).id }}/assets?name=REAMDE.md \
-              --header "Accept: application/vnd.github.v3+json" \
-              --header "Content-Type: $(file -b --mime-type README.md)" \
-              --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              --data-binary @README.md
+        run: |
+          curl --fail \
+            --request POST \
+            --url https://uploads.github.com/repos/kgibm/test/releases/${{ fromJson(steps.get_latest_release.outputs.data).id }}/assets?name=REAMDE.md \
+            --header "Accept: application/vnd.github.v3+json" \
+            --header "Content-Type: $(file -b --mime-type README.md)" \
+            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            --data-binary @README.md
