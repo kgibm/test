@@ -47,7 +47,7 @@ jobs:
         run: |
           curl --fail \
             --request POST \
-            --url https://uploads.github.com/repos/kgibm/test/releases/${{ fromJson(steps.get_latest_release.outputs.data).id }}/assets?name=REAMDE.md \
+            --url https://uploads.github.com/repos/kgibm/test/releases/latest/assets?name=README.md \
             --header "Accept: application/vnd.github.v3+json" \
             --header "Content-Type: $(file -b --mime-type README.md)" \
             --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
