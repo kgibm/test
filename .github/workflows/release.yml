@@ -14,25 +14,16 @@ jobs:
           echo Building for tag ${{github.ref_name}}
 
       # https://docs.github.com/en/rest/releases/releases#create-a-release
-      - uses: octokit/request-action@v2.x
-        id: create_release
-        with:
-          route: POST /repos/kgibm/test/releases
-          owner: octokit
-          repo: request-action
-          tag_name: ${{github.ref_name}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # https://docs.github.com/en/rest/releases/releases#get-the-latest-release
       # https://docs.github.com/en/rest/releases/assets#upload-a-release-asset
-      - run: |
+      - name: Create release and upload assets
+        run: |
           RELEASE="$(curl \
                       --silent \
                       --show-error \
                       --fail \
                       --request GET \
-                      --url https://api.github.com/repos/kgibm/test/releases/latest \
+                      --url https://api.github.com/repos/kgibm/test/releases \
+                      --data '{"tag_name":"${{github.ref_name}}"}' \
                       --header "Accept: application/vnd.github.v3+json" \
                       --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')" && \
           curl \
