@@ -39,4 +39,4 @@ jobs:
 
       - name: Print details
         run: |
-          echo latest release: ${{ steps.get_latest_release.outputs.data }}
+          echo latest release: ${{ steps.get_latest_release.outputs.data.id }}
